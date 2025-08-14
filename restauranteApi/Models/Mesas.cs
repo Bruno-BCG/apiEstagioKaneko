@@ -2,12 +2,12 @@
 {
     public class Mesas
     {
-        public int NumeroMesa { get; set; }
-        public int QuantidadeCadeiras { get; set; }
-        public string Localizacao { get; set; }
-        public char StatusMesa { get; set; }
-        public bool Ativo { get; set; }
-        public DateTime DataCadastro { get; set; }
-        public DateTime? DataAlteracao { get; set; }
+        public int numeroMesa { get; set; }
+        public int? quantidadeCadeiras { get; set; }
+        public string? localizacao { get; set; }
+        public string? statusMesa { get; set; }
+        public bool? ativo { get; set; }
+        public DateTime? dataCadastro { get; set; }
+        public DateTime? dataAlteracao { get; set; }
     }
 }

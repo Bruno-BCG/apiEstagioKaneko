@@ -22,7 +22,7 @@ namespace restauranteApi.Repositories
         {
             const string sql = "SELECT p.*, g.Id AS GId, g.Nome AS GNome, g.Descricao AS GDescricao, g.IpImpressora AS GIpImpressora, g.Ativo AS GAtivo, g.DataCadastro AS GDataCadastro, g.DataAlteracao AS GDataAlteracao FROM Produtos p JOIN Grupo g ON p.GrupoId = g.Id";
             using var connection = _factory.CreateConnection();
-            return await connection.QueryAsync<Produtos, Grupo, Produtos>(sql, (produto, grupo) =>
+            return await connection.QueryAsync<Produtos, Grupos, Produtos>(sql, (produto, grupo) =>
             {
                 produto.oGrupo = grupo;
                 return produto;
@@ -33,7 +33,7 @@ namespace restauranteApi.Repositories
         {
             const string sql = "SELECT p.*, g.Id AS GId, g.Nome AS GNome, g.Descricao AS GDescricao, g.IpImpressora AS GIpImpressora, g.Ativo AS GAtivo, g.DataCadastro AS GDataCadastro, g.DataAlteracao AS GDataAlteracao FROM Produtos p JOIN Grupo g ON p.GrupoId = g.Id WHERE p.Id = @Id";
             using var connection = _factory.CreateConnection();
-            var result = await connection.QueryAsync<Produtos, Grupo, Produtos>(sql, (produto, grupo) =>
+            var result = await connection.QueryAsync<Produtos, Grupos, Produtos>(sql, (produto, grupo) =>
             {
                 produto.oGrupo = grupo;
                 return produto;

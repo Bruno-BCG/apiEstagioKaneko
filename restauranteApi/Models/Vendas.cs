@@ -2,14 +2,19 @@
 {
     public class Vendas
     {
-        public int Id { get; set; }
-        public DateTime DataVenda { get; set; }
-        public decimal ValorTotal { get; set; }
-        public bool Ativo { get; set; }
-        public DateTime DataCadastro { get; set; }
-        public DateTime? DataAlteracao { get; set; }
+        public int id { get; set; }
 
-        public Clientes oCliente { get; set; }
-        public CondicoesPagamento oCondicaoPagamento { get; set; }
+        // FKs
+        public int? clientesId { get; set; }
+        public Clientes? cliente { get; set; }
+
+        public int? condicoesPagamentoId { get; set; }
+        public CondicoesPagamento? condicaoPagamento { get; set; }
+
+        public DateTime? dataVenda { get; set; }
+        public decimal? valorTotal { get; set; }
+        public bool? ativo { get; set; }
+        public DateTime? dataCadastro { get; set; }
+        public DateTime? dataAlteracao { get; set; }
     }
 }

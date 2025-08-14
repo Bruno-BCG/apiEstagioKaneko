@@ -1,11 +1,12 @@
 ﻿namespace restauranteApi.Models
 {
+    // -------------------- Financeiro --------------------
     public class FormasPagamento
     {
-        public int Id { get; set; }
-        public string Descricao { get; set; }
-        public bool Ativo { get; set; }
-        public DateTime DataCadastro { get; set; }
-        public DateTime? DataAlteracao { get; set; }
+        public int id { get; set; }
+        public string? descricao { get; set; }
+        public bool? ativo { get; set; }
+        public DateTime? dataCadastro { get; set; }
+        public DateTime? dataAlteracao { get; set; }
     }
 }

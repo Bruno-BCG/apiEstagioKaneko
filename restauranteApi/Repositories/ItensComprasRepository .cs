@@ -18,11 +18,11 @@ namespace restauranteApi.Repositories
             _factory = factory;
         }
 
-        public async Task<IEnumerable<ItensCompras>> GetAllAsync()
+        public async Task<IEnumerable<itensPedidos>> GetAllAsync()
         {
             const string sql = "SELECT ic.*, c.Modelo AS CModelo, c.Serie AS CSerie, c.Numero AS CNumero, c.FornecedorId AS CFornecedorId, p.Id AS PId, p.Nome AS PNome FROM ItensCompras ic JOIN Compras c ON ic.Modelo = c.Modelo AND ic.Serie = c.Serie AND ic.Numero = c.Numero AND ic.FornecedorId = c.FornecedorId JOIN Produtos p ON ic.ProdutoId = p.Id";
             using var connection = _factory.CreateConnection();
-            return await connection.QueryAsync<ItensCompras, Compras, Produtos, ItensCompras>(
+            return await connection.QueryAsync<itensPedidos, Compras, Produtos, itensPedidos>(
                 sql,
                 (itemCompra, compra, produto) => {
                     itemCompra.oCompra = compra;
@@ -33,11 +33,11 @@ namespace restauranteApi.Repositories
             );
         }
 
-        public async Task<ItensCompras> GetByIdAsync(int id)
+        public async Task<itensPedidos> GetByIdAsync(int id)
         {
             const string sql = "SELECT ic.*, c.Modelo AS CModelo, c.Serie AS CSerie, c.Numero AS CNumero, c.FornecedorId AS CFornecedorId, p.Id AS PId, p.Nome AS PNome FROM ItensCompras ic JOIN Compras c ON ic.Modelo = c.Modelo AND ic.Serie = c.Serie AND ic.Numero = c.Numero AND ic.FornecedorId = c.FornecedorId JOIN Produtos p ON ic.ProdutoId = p.Id WHERE ic.Id = @Id";
             using var connection = _factory.CreateConnection();
-            var result = await connection.QueryAsync<ItensCompras, Compras, Produtos, ItensCompras>(
+            var result = await connection.QueryAsync<itensPedidos, Compras, Produtos, itensPedidos>(
                 sql,
                 (itemCompra, compra, produto) => {
                     itemCompra.oCompra = compra;
@@ -51,7 +51,7 @@ namespace restauranteApi.Repositories
             return result.SingleOrDefault();
         }
 
-        public async Task<int> CreateAsync(ItensCompras itemCompra)
+        public async Task<int> CreateAsync(itensPedidos itemCompra)
         {
             const string sql = @"
                 INSERT INTO ItensCompras
@@ -74,7 +74,7 @@ namespace restauranteApi.Repositories
             });
         }
 
-        public async Task<bool> UpdateAsync(ItensCompras itemCompra)
+        public async Task<bool> UpdateAsync(itensPedidos itemCompra)
         {
             const string sql = @"
                 UPDATE ItensCompras SET

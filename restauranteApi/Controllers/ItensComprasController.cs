@@ -51,7 +51,7 @@ namespace restauranteApi.Controllers
         /// <param name="itemCompra">The ItensCompras object to create. Requires oCompra and oProduto to have their IDs/keys set.</param>
         /// <returns>The created ItensCompras with its assigned ID and a link to its location.</returns>
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] ItensCompras itemCompra)
+        public async Task<IActionResult> Create([FromBody] itensPedidos itemCompra)
         {
             if (!ModelState.IsValid)
             {
@@ -81,7 +81,7 @@ namespace restauranteApi.Controllers
         /// <param name="itemCompra">The updated ItensCompras object.</param>
         /// <returns>NoContent if successful, BadRequest if IDs mismatch, NotFound if Purchase Item not found.</returns>
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] ItensCompras itemCompra)
+        public async Task<IActionResult> Update(int id, [FromBody] itensPedidos itemCompra)
         {
             if (id != itemCompra.Id)
             {

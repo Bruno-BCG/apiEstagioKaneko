@@ -2,11 +2,16 @@
 {
     public class Parcelamentos
     {
-        public int NumeroParcela { get; set; }
-        public int PrazoDias { get; set; }
-        public decimal PorcentagemValor { get; set; }
+        public int numeroParcela { get; set; }
 
-        public CondicoesPagamento oCondicaoPagamento { get; set; }
-        public FormasPagamento oFormaPagamento { get; set; }
+        // FKs
+        public int condicoesPagamentoId { get; set; }
+        public CondicoesPagamento? condicaoPagamento { get; set; }
+
+        public int formasPagamentoId { get; set; }
+        public FormasPagamento? formaPagamento { get; set; }
+
+        public int prazoDias { get; set; }
+        public decimal porcentagemValor { get; set; }
     }
 }

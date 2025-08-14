@@ -2,14 +2,18 @@
 {
     public class ItensPedidos
     {
-        public int NumeroItem { get; set; }
-        public int Quantidade { get; set; }
-        public decimal PrecoUnitario { get; set; }
-        public string Observacao { get; set; }
-        public decimal TotalItem { get; set; }
+        // PK composta e FKs
+        public int pedidosId { get; set; }    // alias de pedidos_id
+        public int produtoId { get; set; }    // alias de produto_id
+        public int numeroMesa { get; set; }   // alias de numero_mesa
 
-        public Pedidos oPedido { get; set; }
-        public Produtos oProduto { get; set; }
-        public Mesas oMesa { get; set; }
+        // Objetos aninhados
+        public Pedidos? pedido { get; set; }
+        public Produtos? produto { get; set; }
+        public Mesas? mesa { get; set; }
+
+        public int quantidade { get; set; }
+        public decimal? precoUnitario { get; set; }
+        public decimal? totalItem { get; set; }
     }
 }

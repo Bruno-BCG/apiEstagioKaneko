@@ -2,21 +2,27 @@
 {
     public class Fornecedores
     {
-        public int Id { get; set; }
-        public string Nome { get; set; }
-        public string CpfCnpj { get; set; }
-        public string InscEstadualRg { get; set; }
-        public DateTime DataFundacaoNascimento { get; set; }
-        public string Endereco { get; set; }
-        public int Numero { get; set; }
-        public string Bairro { get; set; }
-        public string CEP { get; set; }
-        public string Complemento { get; set; }
-        public string Telefone { get; set; }
-        public bool Ativo { get; set; }
-        public DateTime DataCadastro { get; set; }
-        public DateTime? DataAlteracao { get; set; }
+        public int id { get; set; }
+        public string? fornecedor { get; set; }
+        public string? cpfCnpj { get; set; }
+        public string? inscEstadualRg { get; set; }
+        public DateTime? dataFundacaoNascimento { get; set; }
 
-        public Cidades oCidade { get; set; }
+        // FKs
+        public int? cidadeId { get; set; }
+        public Cidades? cidade { get; set; }
+
+        public int? condicoesPagamentoId { get; set; }
+        public CondicoesPagamento? condicaoPagamento { get; set; }
+
+        public string? endereco { get; set; }
+        public int? numero { get; set; }
+        public string? bairro { get; set; }
+        public string? cep { get; set; }
+        public string? complemento { get; set; }
+        public string? telefone { get; set; }
+        public bool? ativo { get; set; }
+        public DateTime? dataCadastro { get; set; }
+        public DateTime? dataAlteracao { get; set; }
     }
 }

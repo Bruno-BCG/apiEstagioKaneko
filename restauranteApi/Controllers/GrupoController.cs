@@ -50,7 +50,7 @@ namespace restauranteApi.Controllers
         /// <param name="grupo">The Grupo object to create.</param>
         /// <returns>The created Grupo with its assigned ID and a link to its location.</returns>
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] Grupo grupo)
+        public async Task<IActionResult> Create([FromBody] Grupos grupo)
         {
             if (!ModelState.IsValid)
             {
@@ -70,7 +70,7 @@ namespace restauranteApi.Controllers
         /// <param name="grupo">The updated Grupo object.</param>
         /// <returns>NoContent if successful, BadRequest if IDs mismatch, NotFound if Group not found.</returns>
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] Grupo grupo)
+        public async Task<IActionResult> Update(int id, [FromBody] Grupos grupo)
         {
             if (id != grupo.Id)
             {
