@@ -20,73 +20,114 @@ namespace restauranteApi.Repositories
 
         public async Task<IEnumerable<Estados>> GetAllAsync()
         {
-            // Dapper multi-mapping to load related Pais object
-            const string sql = "SELECT e.*, p.Id AS PId, p.Nome AS PNome, p.Ativo AS PAtivo, p.DataCadastro AS PDataCadastro, p.DataAlteracao AS PDataAlteracao FROM Estados e JOIN Paises p ON e.PaisId = p.Id";
-            using var connection = _factory.CreateConnection();
-            return await connection.QueryAsync<Estados, Paises, Estados>(sql, (estado, pais) =>
-            {
-                estado.oPais = pais;
-                return estado;
-            }, splitOn: "PId"); // "PId" indicates where the "Paises" object starts in the result set
+            const string sql = @"
+            SELECT
+                e.Id            AS id,
+                e.Estado        AS estado,
+                e.UF            AS uf,
+                e.PaisId        AS paisId,
+                e.Ativo         AS ativo,
+                e.DataCadastro  AS dataCadastro,
+                e.DataAlteracao AS dataAlteracao,
+
+                p.Id            AS id,
+                p.Pais          AS pais,
+                p.Ativo         AS ativo,
+                p.DataCadastro  AS dataCadastro,
+                p.DataAlteracao AS dataAlteracao
+            FROM Estados e
+            LEFT JOIN Paises p ON p.Id = e.PaisId;";
+
+            using var conn = _factory.CreateConnection();
+
+            // Multi-mapping: Estados (primeiro bloco), Paises (segundo bloco)
+            var list = await conn.QueryAsync<Estados, Paises, Estados>(
+                sql,
+                (e, p) =>
+                {
+                    e.pais = p;
+                    return e;
+                },
+                splitOn: "id" // divide quando encontrar o segundo "id" (o do País)
+            );
+
+            return list;
         }
 
-        public async Task<Estados> GetByIdAsync(int id)
+        public async Task<Estados?> GetByIdAsync(int id)
         {
-            const string sql = "SELECT e.*, p.Id AS PId, p.Nome AS PNome, p.Ativo AS PAtivo, p.DataCadastro AS PDataCadastro, p.DataAlteracao AS PDataAlteracao FROM Estados e JOIN Paises p ON e.PaisId = p.Id WHERE e.Id = @Id";
-            using var connection = _factory.CreateConnection();
-            var result = await connection.QueryAsync<Estados, Paises, Estados>(sql, (estado, pais) =>
-            {
-                estado.oPais = pais;
-                return estado;
-            }, new { Id = id }, splitOn: "PId");
+            const string sql = @"
+            SELECT
+                e.Id            AS id,
+                e.Estado        AS estado,
+                e.UF            AS uf,
+                e.PaisId        AS paisId,
+                e.Ativo         AS ativo,
+                e.DataCadastro  AS dataCadastro,
+                e.DataAlteracao AS dataAlteracao,
 
-            return result.SingleOrDefault();
+                p.Id            AS id,
+                p.Pais          AS pais,
+                p.Ativo         AS ativo,
+                p.DataCadastro  AS dataCadastro,
+                p.DataAlteracao AS dataAlteracao
+            FROM Estados e
+            LEFT JOIN Paises p ON p.Id = e.PaisId
+            WHERE e.Id = @id;";
+
+            using var conn = _factory.CreateConnection();
+
+            var result = await conn.QueryAsync<Estados, Paises, Estados>(
+                sql,
+                (e, p) =>
+                {
+                    e.pais = p;
+                    return e;
+                },
+                new { id },
+                splitOn: "id"
+            );
+
+            return result.FirstOrDefault();
         }
+
         public async Task<int> CreateAsync(Estados estado)
         {
             const string sql = @"
-                INSERT INTO Estados
-                    (Nome, PaisId, Ativo, DataCadastro, DataAlteracao)
-                VALUES
-                    (@Nome, @PaisId, @Ativo, GETDATE(), NULL);
+                INSERT INTO Estados (Estado, UF, PaisId, Ativo, DataCadastro, DataAlteracao)
+                VALUES (@estado, @uf, @paisId, @ativo, GETDATE(), NULL);
                 SELECT CAST(SCOPE_IDENTITY() AS INT);";
 
-            using var connection = _factory.CreateConnection();
-            return await connection.ExecuteScalarAsync<int>(sql, new
-            {
-                estado.Nome,
-                PaisId = estado.oPais?.Id, // Access Id from the related object
-                estado.Ativo
-            });
+            using var conn = _factory.CreateConnection();
+            var newId = await conn.ExecuteScalarAsync<int>(sql, estado);
+            return newId;
         }
 
-        public async Task<bool> UpdateAsync(Estados estado)
+        public async Task<Estados?> UpdateAsync(Estados estado)
         {
             const string sql = @"
-                UPDATE Estados SET
-                    Nome = @Nome,
-                    PaisId = @PaisId,
-                    Ativo = @Ativo,
-                    DataAlteracao = GETDATE()
-                WHERE Id = @Id";
+            UPDATE Estados SET
+                Estado        = @estado,
+                UF            = @uf,
+                PaisId        = @paisId,
+                Ativo         = @ativo,
+                DataAlteracao = GETDATE()
+            WHERE Id = @id;";
 
-            using var connection = _factory.CreateConnection();
-            var affected = await connection.ExecuteAsync(sql, new
-            {
-                estado.Nome,
-                PaisId = estado.oPais?.Id, // Access Id from the related object
-                estado.Ativo,
-                estado.Id
-            });
-            return affected > 0;
+            using var conn = _factory.CreateConnection();
+            var rows = await conn.ExecuteAsync(sql, estado);
+            if (rows == 0) return null;
+
+            // retorna o registro completo (com pais aninhado)
+            return await GetByIdAsync(estado.id);
         }
 
         public async Task<bool> DeleteAsync(int id)
         {
-            const string sql = "DELETE FROM Estados WHERE Id = @Id";
-            using var connection = _factory.CreateConnection();
-            var rowsAffected = await connection.ExecuteAsync(sql, new { Id = id });
-            return rowsAffected > 0;
+            const string sql = "DELETE FROM Estados WHERE Id = @id;";
+            using var conn = _factory.CreateConnection();
+            var rows = await conn.ExecuteAsync(sql, new { id });
+            return rows > 0;
         }
     }
 }

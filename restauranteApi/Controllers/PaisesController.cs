@@ -17,6 +17,7 @@ namespace restauranteApi.Controllers
             _repository = repository;
         }
 
+        // GET: api/paises
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -24,37 +25,38 @@ namespace restauranteApi.Controllers
             return Ok(paises);
         }
 
-        [HttpGet("{id}")]
+        // GET: api/paises/1
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById(int id)
         {
             var pais = await _repository.GetByIdAsync(id);
-            return pais == null ? NotFound() : Ok(pais);
+            return pais is null ? NotFound() : Ok(pais);
         }
 
+        // POST: api/paises
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] Paises pais)
         {
-            var id = await _repository.CreateAsync(pais);
-            pais.Id = id;
-            return CreatedAtAction(nameof(GetById), new { id = id }, pais);
+            var newId = await _repository.CreateAsync(pais);
+            pais.id = newId;
+            return CreatedAtAction(nameof(GetById), new { id = newId }, pais);
         }
 
-        [HttpPut("{id}")]
+        // PUT: api/paises/1
+        [HttpPut("{id:int}")]
         public async Task<IActionResult> Update(int id, [FromBody] Paises pais)
         {
-            if (id != pais.Id)
-            {
-                return BadRequest("ID mismatch");
-            }
-            var updated = await _repository.UpdateAsync(pais);
-            return updated ? NoContent() : NotFound();
+            if (id != pais.id) return BadRequest("id do path difere do body.");
+            var ok = await _repository.UpdateAsync(pais);
+            return ok ? NoContent() : NotFound();
         }
 
-        [HttpDelete("{id}")]
+        // DELETE: api/paises/1
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var deleted = await _repository.DeleteAsync(id);
-            return deleted ? NoContent() : NotFound();
+            var ok = await _repository.DeleteAsync(id);
+            return ok ? NoContent() : NotFound();
         }
     }
 }

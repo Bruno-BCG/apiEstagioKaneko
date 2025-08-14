@@ -11,24 +11,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<SqlConnectionFactory>();
-builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
-builder.Services.AddScoped<ICidadesRepository, CidadesRepository>(); // Add this line
-builder.Services.AddScoped<IClientesRepository, ClientesRepository>();
-builder.Services.AddScoped<IComprasRepository, ComprasRepository>();
-builder.Services.AddScoped<ICondicoesPagamentoRepository, CondicoesPagamentoRepository>();
-builder.Services.AddScoped<IEstadosRepository, EstadosRepository>();
-builder.Services.AddScoped<IFormasPagamentoRepository, FormasPagamentoRepository>();
-builder.Services.AddScoped<IFuncionariosRepository, FuncionariosRepository>();
-builder.Services.AddScoped<IFornecedoresRepository, FornecedoresRepository>();
-builder.Services.AddScoped<IGrupoRepository, GrupoRepository>();
-builder.Services.AddScoped<IItensComprasRepository, ItensComprasRepository>();
-builder.Services.AddScoped<IItensPedidosRepository, ItensPedidosRepository>();
-builder.Services.AddScoped<IMesasRepository, MesasRepository>();
+
 builder.Services.AddScoped<IPaisesRepository, PaisesRepository>();
-builder.Services.AddScoped<IParcelamentosRepository, ParcelamentosRepository>();
-builder.Services.AddScoped<IPedidosRepository, PedidosRepository>();
-builder.Services.AddScoped<IVendasRepository, VendasRepository>();
-builder.Services.AddScoped<IProdutosVendidosRepository, ProdutosVendidosRepository>();
+builder.Services.AddScoped<IEstadosRepository, EstadosRepository>();
+builder.Services.AddScoped<ICidadesRepository, CidadesRepository>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

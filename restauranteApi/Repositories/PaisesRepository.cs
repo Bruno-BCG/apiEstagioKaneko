@@ -19,25 +19,40 @@ namespace restauranteApi.Repositories
 
         public async Task<IEnumerable<Paises>> GetAllAsync()
         {
-            const string sql = "SELECT * FROM Paises";
+            const string sql = @"
+                SELECT
+                    Id            AS id,
+                    Pais          AS pais,
+                    Ativo         AS ativo,
+                    DataCadastro  AS dataCadastro,
+                    DataAlteracao AS dataAlteracao
+                FROM Paises;";
+
             using var connection = _factory.CreateConnection();
             return await connection.QueryAsync<Paises>(sql);
         }
 
-        public async Task<Paises> GetByIdAsync(int id)
+        public async Task<Paises?> GetByIdAsync(int id)
         {
-            const string sql = "SELECT * FROM Paises WHERE Id = @Id";
+            const string sql = @"
+                SELECT
+                    Id            AS id,
+                    Pais          AS pais,
+                    Ativo         AS ativo,
+                    DataCadastro  AS dataCadastro,
+                    DataAlteracao AS dataAlteracao
+                FROM Paises
+                WHERE Id = @id;";
+
             using var connection = _factory.CreateConnection();
-            return await connection.QueryFirstOrDefaultAsync<Paises>(sql, new { Id = id });
+            return await connection.QueryFirstOrDefaultAsync<Paises>(sql, new { id });
         }
 
         public async Task<int> CreateAsync(Paises pais)
         {
             const string sql = @"
-                INSERT INTO Paises
-                    (Nome, Ativo, DataCadastro, DataAlteracao)
-                VALUES
-                    (@Nome, @Ativo, GETDATE(), NULL);
+                INSERT INTO Paises (Pais, Ativo, DataCadastro, DataAlteracao)
+                VALUES (@pais, @ativo, GETDATE(), NULL);
                 SELECT CAST(SCOPE_IDENTITY() AS INT);";
 
             using var connection = _factory.CreateConnection();
@@ -48,10 +63,10 @@ namespace restauranteApi.Repositories
         {
             const string sql = @"
                 UPDATE Paises SET
-                    Nome = @Nome,
-                    Ativo = @Ativo,
+                    Pais          = @pais,
+                    Ativo         = @ativo,
                     DataAlteracao = GETDATE()
-                WHERE Id = @Id";
+                WHERE Id = @id;";
 
             using var connection = _factory.CreateConnection();
             var affected = await connection.ExecuteAsync(sql, pais);
@@ -60,10 +75,10 @@ namespace restauranteApi.Repositories
 
         public async Task<bool> DeleteAsync(int id)
         {
-            const string sql = "DELETE FROM Paises WHERE Id = @Id";
+            const string sql = "DELETE FROM Paises WHERE Id = @id;";
             using var connection = _factory.CreateConnection();
-            var rowsAffected = await connection.ExecuteAsync(sql, new { Id = id });
-            return rowsAffected > 0;
+            var rows = await connection.ExecuteAsync(sql, new { id });
+            return rows > 0;
         }
     }
 }

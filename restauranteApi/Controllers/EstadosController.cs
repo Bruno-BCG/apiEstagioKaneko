@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace restauranteApi.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")] // This sets the base route, e.g., /api/Estados
+    [Route("api/[controller]")]
     public class EstadosController : ControllerBase
     {
         private readonly IEstadosRepository _repository;
@@ -17,11 +17,7 @@ namespace restauranteApi.Controllers
             _repository = repository;
         }
 
-        /// <summary>
-        /// Retrieves all States.
-        /// GET /api/Estados
-        /// </summary>
-        /// <returns>A list of States.</returns>
+        // GET: api/estados
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -29,74 +25,38 @@ namespace restauranteApi.Controllers
             return Ok(estados);
         }
 
-        /// <summary>
-        /// Retrieves a specific State by ID.
-        /// GET /api/Estados/{id}
-        /// </summary>
-        /// <param name="id">The ID of the State to retrieve.</param>
-        /// <returns>The State object if found, otherwise NotFound.</returns>
-        [HttpGet("{id}")]
+        // GET: api/estados/1
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById(int id)
         {
             var estado = await _repository.GetByIdAsync(id);
-            return estado == null ? NotFound() : Ok(estado);
+            return estado is null ? NotFound() : Ok(estado);
         }
 
-        /// <summary>
-        /// Creates a new State.
-        /// POST /api/Estados
-        /// </summary>
-        /// <param name="estado">The State object to create.</param>
-        /// <returns>The created State with its assigned ID and a link to its location.</returns>
+        // POST: api/estados
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] Estados estado)
         {
-            // Basic validation check; more complex validation can be done with DataAnnotations
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var id = await _repository.CreateAsync(estado);
-            estado.Id = id; // Update the model with the generated ID
-            return CreatedAtAction(nameof(GetById), new { id = id }, estado);
+            var newId = await _repository.CreateAsync(estado);
+            var created = await _repository.GetByIdAsync(newId);
+            return CreatedAtAction(nameof(GetById), new { id = newId }, created);
         }
 
-        /// <summary>
-        /// Updates an existing State.
-        /// PUT /api/Estados/{id}
-        /// </summary>
-        /// <param name="id">The ID of the State to update.</param>
-        /// <param name="estado">The updated State object.</param>
-        /// <returns>NoContent if successful, BadRequest if IDs mismatch, NotFound if State not found.</returns>
-        [HttpPut("{id}")]
+        // PUT: api/estados/1
+        [HttpPut("{id:int}")]
         public async Task<IActionResult> Update(int id, [FromBody] Estados estado)
         {
-            if (id != estado.Id)
-            {
-                return BadRequest("State ID in route does not match body.");
-            }
-
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
+            if (id != estado.id) return BadRequest("id do path difere do body.");
             var updated = await _repository.UpdateAsync(estado);
-            return updated ? NoContent() : NotFound();
+            return updated is null ? NotFound() : Ok(updated);
         }
 
-        /// <summary>
-        /// Deletes a State by ID.
-        /// DELETE /api/Estados/{id}
-        /// </summary>
-        /// <param name="id">The ID of the State to delete.</param>
-        /// <returns>NoContent if successful, NotFound if State not found.</returns>
-        [HttpDelete("{id}")]
+        // DELETE: api/estados/1
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var deleted = await _repository.DeleteAsync(id);
-            return deleted ? NoContent() : NotFound();
+            var ok = await _repository.DeleteAsync(id);
+            return ok ? NoContent() : NotFound();
         }
     }
 }
