@@ -11,5 +11,6 @@
         public bool? ativo { get; set; }
         public DateTime? dataCadastro { get; set; }
         public DateTime? dataAlteracao { get; set; }
+        public List<Parcelamentos>? parcelamentos { get; set; }
     }
 }

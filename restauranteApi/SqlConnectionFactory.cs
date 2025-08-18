@@ -6,16 +6,18 @@ namespace restauranteApi
 
     public class SqlConnectionFactory
     {
-        private readonly IConfiguration _configuration;
+        private readonly string _cs;
+        public SqlConnectionFactory(IConfiguration cfg)
+            => _cs = cfg.GetConnectionString("DefaultConnection")!;
 
-        public SqlConnectionFactory(IConfiguration configuration)
-        {
-            _configuration = configuration;
-        }
+        public SqlConnection CreateConnection() => new SqlConnection(_cs);
 
-        public IDbConnection CreateConnection()
+        public async Task<SqlConnection> OpenConnectionAsync()
         {
-            return new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            var conn = new SqlConnection(_cs);
+            await conn.OpenAsync();
+            return conn;
         }
     }
+
 }

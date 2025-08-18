@@ -15,6 +15,9 @@ builder.Services.AddSingleton<SqlConnectionFactory>();
 builder.Services.AddScoped<IPaisesRepository, PaisesRepository>();
 builder.Services.AddScoped<IEstadosRepository, EstadosRepository>();
 builder.Services.AddScoped<ICidadesRepository, CidadesRepository>();
+builder.Services.AddScoped<IFormasPagamentoRepository, FormasPagamentoRepository>();
+builder.Services.AddScoped<ICondicoesPagamentoRepository, CondicoesPagamentoRepository>();
+builder.Services.AddScoped<IParcelamentosRepository, ParcelamentosRepository>();
 
 var app = builder.Build();
 
