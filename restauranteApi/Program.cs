@@ -22,6 +22,10 @@ builder.Services.AddScoped<IParcelamentosRepository, ParcelamentosRepository>();
 builder.Services.AddScoped<IFuncionariosRepository, FuncionariosRepository>();
 builder.Services.AddScoped<IFornecedoresRepository, FornecedoresRepository>();
 builder.Services.AddScoped<IClientesRepository, ClientesRepository>();
+builder.Services.AddScoped<IGruposRepository, GruposRepository>();
+builder.Services.AddScoped<IMarcasRepository, MarcasRepository>();
+builder.Services.AddScoped<ITransportadorasRepository, TransportadorasRepository>();
+builder.Services.AddScoped<IVeiculosRepository, VeiculosRepository>();
 
 var app = builder.Build();
 

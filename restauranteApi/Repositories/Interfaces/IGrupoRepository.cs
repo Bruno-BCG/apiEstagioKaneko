@@ -2,12 +2,12 @@
 
 namespace restauranteApi.Repositories.Interfaces
 {
-    public interface IGrupoRepository
+    public interface IGruposRepository
     {
         Task<IEnumerable<Grupos>> GetAllAsync();
-        Task<Grupos> GetByIdAsync(int id);
+        Task<Grupos?> GetByIdAsync(int id);
         Task<int> CreateAsync(Grupos grupo);
-        Task<bool> UpdateAsync(Grupos grupo);
+        Task<Grupos?> UpdateAsync(Grupos grupo);
         Task<bool> DeleteAsync(int id);
     }
 }
