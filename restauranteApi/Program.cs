@@ -1,3 +1,4 @@
+using Microsoft.Identity.Client;
 using restauranteApi;
 using restauranteApi.Repositories;
 using restauranteApi.Repositories.Interfaces;
@@ -18,6 +19,9 @@ builder.Services.AddScoped<ICidadesRepository, CidadesRepository>();
 builder.Services.AddScoped<IFormasPagamentoRepository, FormasPagamentoRepository>();
 builder.Services.AddScoped<ICondicoesPagamentoRepository, CondicoesPagamentoRepository>();
 builder.Services.AddScoped<IParcelamentosRepository, ParcelamentosRepository>();
+builder.Services.AddScoped<IFuncionariosRepository, FuncionariosRepository>();
+builder.Services.AddScoped<IFornecedoresRepository, FornecedoresRepository>();
+builder.Services.AddScoped<IClientesRepository, ClientesRepository>();
 
 var app = builder.Build();
 
